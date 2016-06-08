@@ -4,32 +4,6 @@ var entries = {
     'simpleDom': ['./src/main.js']
 };
 
-var devOnlyPlugins = [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
-];
-
-var plugins = [
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    })
-];
-
-if (process.env.NODE_ENV === 'production') {
-    plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            compressor: {
-                screw_ie8: true,
-                warnings: false
-            }
-        })
-    );
-} else if (process.env.NODE_ENV === 'dev') {
-    plugins = devOnlyPlugins.concat(plugins);
-}
-
 module.exports = {
     output: {
         path: './dist/',
@@ -44,11 +18,18 @@ module.exports = {
     module: {
         loaders: [
             {
+                // preprocess all files with babel to turn ES6 code into ES5 code
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader?stage=0&optional=runtime&jsxPragma=SimpleDom.el'
+                loader: 'babel-loader',
+                query: {
+                    presets: ['stage-0', 'es2015'],
+                    plugins: [
+                        ["transform-react-jsx", { "pragma": "SimpleDom.el" }],
+                        "babel-plugin-add-module-exports"
+                    ]
+                }
             }
         ]
-    },
-    plugins: plugins
+    }
 };

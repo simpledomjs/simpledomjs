@@ -62,10 +62,21 @@ module.exports = function(config) {
 
       webpack: {
           module: {
-              loaders: [{
-                  test: /\.(js|jsx)$/, exclude: /(bower_components|node_modules)/,
-                  loader: 'babel-loader?stage=0&optional=runtime&jsxPragma=SimpleDom.el'
-              }]
+              loaders: [
+                  {
+                      // preprocess all files with babel to turn ES6 code into ES5 code
+                      test: /\.js$/,
+                      exclude: /node_modules/,
+                      loader: 'babel-loader',
+                      query: {
+                          presets: ['stage-0', 'es2015'],
+                          plugins: [
+                              ["transform-react-jsx", { "pragma": "SimpleDom.el" }],
+                              "babel-plugin-add-module-exports"
+                          ]
+                      }
+                  }
+              ]
           }
       },
       webpackMiddleware: { noInfo: true },
