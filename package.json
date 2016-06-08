@@ -1,12 +1,11 @@
 {
     "name": "simpledom.js",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "A simple DOM creator in javascript",
-    "main": "src/main.js",
+    "main": "dist/simpleDom.js",
     "scripts": {
-        "build": "webpack --colors",
-        "dist": "NODE_ENV=production webpack --colors -p",
-        "start": "NODE_ENV=dev webpack-dev-server -d --colors --hot --inline --progress",
+        "build": "webpack --colors -p",
+        "start": "webpack-dev-server -d --colors --hot --inline --progress",
         "test": "karma start"
     },
     "author": "Yan Bonnel",
