@@ -37,7 +37,10 @@ describe('SimpleDom API', () => {
         it('Simple test', () => {
             const result = SimpleDom.renderToString(
                 SimpleDom.el('div', null,
-                    SimpleDom.el('div', {id: 'id1', onClick: () => {}}, 'content')
+                    SimpleDom.el('div', {
+                        id: 'id1', onClick: () => {
+                        }
+                    }, 'content')
                 ),
                 SimpleDom.el('ul', null,
                     SimpleDom.el('li', null, '1'),
@@ -54,8 +57,31 @@ describe('SimpleDom API', () => {
 
     describe('SimpleDom.render', () => {
 
-        it('SimpleTest', () => {
+        it('renderWithPredicate', () => {
 
+            if (document.getElementById('container')) {
+                document.getElementById('container').remove();
+            }
+
+            const container = document.createElement('div');
+            container.id = 'container';
+
+            document.body.appendChild(container);
+
+
+            SimpleDom.renderTo(
+                'container',
+                SimpleDom.el('div', null, [
+                    SimpleDom.el('div', {id: 'id1'}, 'content'),
+                    SimpleDom.predicate(false, SimpleDom.el('div', {id: 'id2'}, 'content')),
+                    SimpleDom.predicate(true, SimpleDom.el('div', {id: 'id3'}, 'content'))
+                ])
+            );
+
+            expect(document.getElementById("container").innerHTML).to.be.equal('<div><div id="id1">content</div><div id="id3">content</div></div>');
+        });
+
+        it('SimpleTest', () => {
             if (document.getElementById('container')) {
                 document.getElementById('container').remove();
             }
