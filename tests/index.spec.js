@@ -144,5 +144,36 @@ describe('SimpleDom API', () => {
             expect(result).to.be.equal(
                 '<div id="id1"><div>content</div></div>');
         })
-    })
+    });
+
+    describe('SimpleDom.checked', () => {
+        it('UseOfUndefined in renderToString', () => {
+            const result = SimpleDom.renderToString(
+                <div id="id1">
+                    <input type="checkbox" checked={undefined}/>
+                </div>
+            );
+
+            expect(result).to.be.equal(
+                '<div id="id1"><input type="checkbox"></input></div>');
+        });
+        it('UseOfUndefined in renderTo', () => {
+            if (document.getElementById('container')) {
+                document.getElementById('container').remove();
+            }
+
+            const container = document.createElement('div');
+            container.id = 'container';
+
+            document.body.appendChild(container);
+            SimpleDom.renderTo(
+		'container',
+                <div id="id1">
+                    <input type="checkbox" checked={undefined}/>
+                </div>
+            );
+	    
+	    expect(document.getElementById("container").innerHTML).to.be.equal('<div id="id1"><input type="checkbox"></div>');
+        });
+    });
 });

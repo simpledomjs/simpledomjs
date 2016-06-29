@@ -7,11 +7,10 @@ export function renderToString(...elements) {
             return '' + el;
         }
         const attributes = Object.keys(el.attrs)
-            .filter(attribute => !attribute.startsWith('on'))
+            .filter(attribute => !attribute.startsWith('on') && el.attrs[attribute] !== undefined)
             .map(attribute => {
                 const key = dasherize(attribute === 'className' ? 'class' : attribute);
                 let value = el.attrs[attribute];
-
                 if (key === 'style' && typeof value === 'object') {
                     value = Object.keys(value)
                         .map(key => '' + key + ':' + value[key])
@@ -49,9 +48,12 @@ function convertToNode(element) {
         return document.createTextNode('' + element);
     }
 
+    const value = element;
+
     const node = document.createElement(element.name);
 
     Object.keys(element.attrs)
+        .filter(key => element.attrs[key] !== undefined)
         .forEach(key => {
             const value = element.attrs[key];
             if (key.startsWith('on')) {
