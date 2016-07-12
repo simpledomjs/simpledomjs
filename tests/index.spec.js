@@ -30,6 +30,14 @@ describe('SimpleDom API', () => {
             expect(
                 SimpleDom.predicate(false, () => 'result')
             ).to.be.an('undefined');
+        });
+        it('with an else result', () => {
+            expect(
+                SimpleDom.predicate(true, () => 'result', () => 'else')
+            ).to.be.equal('result');
+            expect(
+                SimpleDom.predicate(false, () => 'result', () => 'else')
+            ).to.be.equal('else');
         })
     });
 
@@ -172,7 +180,7 @@ describe('SimpleDom API', () => {
                     <input type="checkbox" checked={undefined}/>
                 </div>
             );
-	    
+
 	    expect(document.getElementById("container").innerHTML).to.be.equal('<div id="id1"><input type="checkbox"></div>');
         });
     });

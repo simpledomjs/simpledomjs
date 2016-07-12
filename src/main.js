@@ -98,9 +98,10 @@ export function el(name, attrs, ...children) {
     };
 }
 
-export function predicate(cond, element) {
+export function predicate(cond, element, elseElement) {
     const isTrue = isFunction(cond) ? cond() : cond;
     if (isTrue) {
         return isFunction(element) ? element() : element;
     }
+    return isFunction(elseElement) ? elseElement() : elseElement;
 }
