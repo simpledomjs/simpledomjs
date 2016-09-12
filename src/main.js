@@ -39,7 +39,7 @@ export function renderTo(node, ...elements) {
         realNode.removeChild(realNode.firstChild);
     }
 
-    flatten(elements).filter(element => element !== undefined).map(convertToNode)
+    flatten(elements).filter(element => !!element).map(convertToNode)
         .forEach(node => realNode.appendChild(node));
 }
 
@@ -47,8 +47,6 @@ function convertToNode(element) {
     if (!element.isElem) {
         return document.createTextNode('' + element);
     }
-
-    const value = element;
 
     const node = document.createElement(element.name);
 
@@ -78,7 +76,7 @@ function convertToNode(element) {
         });
 
     element.children
-        .filter(element => element !== undefined)
+        .filter(element => !!element)
         .map(convertToNode)
         .forEach(child =>
             node.appendChild(child));
@@ -93,7 +91,7 @@ export function el(name, attrs, ...children) {
     return {
         name,
         attrs: attrs || {},
-        children: (flatten(children) || []).filter(child => child !== undefined),
+        children: (flatten(children) || []).filter(child => !!child),
         isElem: true
     };
 }
