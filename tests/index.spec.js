@@ -80,13 +80,23 @@ describe('SimpleDom API', () => {
             SimpleDom.renderTo(
                 'container',
                 SimpleDom.el('div', null, [
-                    SimpleDom.el('div', {id: 'id1'}, 'content'),
+                    SimpleDom.el('div', {
+                        id: 'id1',
+                        class:{
+                            testCamelCase: true,
+                            noRender: false
+                        },
+                        style:{
+                            marginTop: '5px',
+                            marginBottom: '5px'
+                        }
+                    }, 'content'),
                     SimpleDom.predicate(false, SimpleDom.el('div', {id: 'id2'}, 'content')),
                     SimpleDom.predicate(true, SimpleDom.el('div', {id: 'id3'}, 'content'))
                 ])
             );
 
-            expect(document.getElementById("container").innerHTML).to.be.equal('<div><div id="id1">content</div><div id="id3">content</div></div>');
+            expect(document.getElementById("container").innerHTML).to.be.equal('<div><div id="id1" class="test-camel-case" style="margin-top: 5px; margin-bottom: 5px;">content</div><div id="id3">content</div></div>');
         });
 
         it('SimpleTest', () => {
@@ -128,13 +138,19 @@ describe('SimpleDom API', () => {
     describe('SimpleDom.jsx', () => {
         it('SimpleTest', () => {
             const result = SimpleDom.renderToString(
-                <div id="id1">
+                <div id="id1"
+                     class={{testCamelCase: true, noDisplay: false}}
+                     style={{
+                         marginTop: '5px',
+                         marginBottom: '5px'
+                     }}
+                >
                     <div>content</div>
                 </div>
             );
 
             expect(result).to.be.equal(
-                '<div id="id1"><div>content</div></div>');
+                '<div id="id1" class="test-camel-case" style="margin-top:5px;margin-bottom:5px"><div>content</div></div>');
         });
 
         it('SimpleComponent', () => {

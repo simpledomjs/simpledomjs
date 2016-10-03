@@ -13,16 +13,17 @@ export function renderToString(...elements) {
                 let value = el.attrs[attribute];
                 if (key === 'style' && typeof value === 'object') {
                     value = Object.keys(value)
-                        .map(key => '' + key + ':' + value[key])
+                        .map(key => '' + dasherize(key) + ':' + value[key])
                         .join(';');
                 } else if (key === 'class' && typeof value === 'object') {
                     value = Object.keys(value).filter(classValue => value[classValue])
+                        .map(dasherize)
                         .join(' ');
                 }
 
                 return ` ${key}="${value}"`
             })
-            .join();
+            .join('');
         const content = renderToString(...el.children);
         return `<${el.name}${attributes}>${content}</${el.name}>`
     }).join('');
@@ -64,11 +65,11 @@ function convertToNode(element) {
                 key = dasherize(key);
                 if (key === 'style' && typeof value === 'object') {
                     Object.keys(value).forEach(styleKey =>
-                        node.style[styleKey] = value[styleKey]
+                        node.style[dasherize(styleKey)] = value[styleKey]
                     )
                 } else if (key === 'class' && typeof value === 'object') {
                     Object.keys(value).filter(classValue => value[classValue])
-                        .forEach(classValue => node.classList.add(classValue));
+                        .forEach(classValue => node.classList.add(dasherize(classValue)));
                 } else {
                     node.setAttribute(key, value);
                 }
