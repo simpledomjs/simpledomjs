@@ -40,7 +40,7 @@ export function renderTo(node, ...elements) {
         realNode.removeChild(realNode.firstChild);
     }
 
-    flatten(elements).filter(element => !!element).map(convertToNode)
+    flatten(elements).filter(element => element !== undefined && element !== null).map(convertToNode)
         .forEach(node => realNode.appendChild(node));
 }
 
@@ -77,7 +77,7 @@ function convertToNode(element) {
         });
 
     element.children
-        .filter(element => !!element)
+        .filter(element => element !== undefined && element !== null)
         .map(convertToNode)
         .forEach(child =>
             node.appendChild(child));
@@ -92,7 +92,7 @@ export function el(name, attrs, ...children) {
     return {
         name,
         attrs: attrs || {},
-        children: (flatten(children) || []).filter(child => !!child),
+        children: (flatten(children) || []).filter(child => child !== null && child !== undefined),
         isElem: true
     };
 }

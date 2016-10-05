@@ -50,6 +50,7 @@ describe('SimpleDom API', () => {
                         }
                     }, 'content')
                 ),
+                SimpleDom.el('div', null, 0),
                 SimpleDom.el('ul', null,
                     SimpleDom.el('li', null, '1'),
                     SimpleDom.el('li', null, '2'),
@@ -59,7 +60,7 @@ describe('SimpleDom API', () => {
             );
 
             expect(result).to.be.equal(
-                '<div><div id="id1">content</div></div><ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>');
+                '<div><div id="id1">content</div></div><div>0</div><ul><li>1</li><li>2</li><li>3</li><li>4</li></ul>');
         })
     });
 
@@ -91,12 +92,13 @@ describe('SimpleDom API', () => {
                             marginBottom: '5px'
                         }
                     }, 'content'),
+                    SimpleDom.el('div', {}, 0),
                     SimpleDom.predicate(false, SimpleDom.el('div', {id: 'id2'}, 'content')),
                     SimpleDom.predicate(true, SimpleDom.el('div', {id: 'id3'}, 'content'))
                 ])
             );
 
-            expect(document.getElementById("container").innerHTML).to.be.equal('<div><div id="id1" class="test-camel-case" style="margin-top: 5px; margin-bottom: 5px;">content</div><div id="id3">content</div></div>');
+            expect(document.getElementById("container").innerHTML).to.be.equal('<div><div id="id1" class="test-camel-case" style="margin-top: 5px; margin-bottom: 5px;">content</div><div>0</div><div id="id3">content</div></div>');
         });
 
         it('SimpleTest', () => {
