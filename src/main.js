@@ -4,7 +4,7 @@ import {flatten, isFunction, dasherize} from './utils.js';
 export function renderToString(...elements) {
     return flatten(elements).map(el => {
         if (!el.name) {
-            return '' + el;
+            return '' + (el.__asHtml || el);
         }
         const attributes = Object.keys(el.attrs)
             .filter(attribute => !attribute.startsWith('on') && el.attrs[attribute] !== undefined)
@@ -46,7 +46,7 @@ export function renderTo(node, ...elements) {
 
 function convertToNode(element) {
     if (!element.isElem) {
-        return document.createTextNode('' + element);
+        return element.__asHtml ? element : document.createTextNode('' + element);
     }
 
     const node = document.createElement(element.name);
@@ -79,8 +79,13 @@ function convertToNode(element) {
     element.children
         .filter(element => element !== undefined && element !== null)
         .map(convertToNode)
-        .forEach(child =>
-            node.appendChild(child));
+        .forEach(child => {
+            if (child.__asHtml) {
+                node.insertAdjacentHTML('beforeend', child.__asHtml);
+            } else {
+                node.appendChild(child)
+            }
+        });
 
     return node;
 }
