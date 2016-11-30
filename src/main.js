@@ -7,7 +7,7 @@ export function renderToString(...elements) {
             return '' + (el.__asHtml || el);
         }
         const attributes = Object.keys(el.attrs)
-            .filter(attribute => !attribute.startsWith('on') && el.attrs[attribute] !== undefined)
+            .filter(attribute => !attribute.startsWith('on') && el.attrs[attribute] !== undefined && attribute !== 'ref')
             .map(attribute => {
                 const key = dasherize(attribute === 'className' ? 'class' : attribute);
                 let value = el.attrs[attribute];
@@ -58,6 +58,8 @@ function convertToNode(element) {
             if (key.startsWith('on')) {
                 const eventKey = key.substring(2).toLowerCase();
                 node.addEventListener(eventKey, event => value(event));
+            } else if (key === 'ref') {
+                value(node);
             } else {
                 if (key === 'className') {
                     key = 'class';

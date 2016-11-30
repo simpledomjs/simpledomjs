@@ -174,6 +174,34 @@ describe('SimpleDom API', () => {
         })
     });
 
+
+
+    describe('SimpleDom.ref', () => {
+        it('SimpleTestWithRef', () => {
+            if (document.getElementById('container')) {
+                document.getElementById('container').remove();
+            }
+
+            const nodeRef = {
+                node: undefined
+            };
+
+            const container = document.createElement('div');
+            container.id = 'container';
+
+            document.body.appendChild(container);
+            SimpleDom.renderTo(
+                'container',
+                <div id="id1">
+                    <div ref={node => nodeRef.node = node}>Coucou</div>
+                </div>
+            );
+
+            expect(document.getElementById("container").innerHTML).to.be.equal('<div id="id1"><div>Coucou</div></div>');
+            expect(nodeRef.node).to.be.equal(document.getElementById('container').querySelector('#id1').querySelector("div"));
+        });
+    });
+
     describe('SimpleDom.checked', () => {
         it('UseOfUndefined in renderToString', () => {
             const result = SimpleDom.renderToString(
@@ -195,13 +223,13 @@ describe('SimpleDom API', () => {
 
             document.body.appendChild(container);
             SimpleDom.renderTo(
-		'container',
+                'container',
                 <div id="id1">
                     <input type="checkbox" checked={undefined}/>
                 </div>
             );
 
-	    expect(document.getElementById("container").innerHTML).to.be.equal('<div id="id1"><input type="checkbox"></div>');
+            expect(document.getElementById("container").innerHTML).to.be.equal('<div id="id1"><input type="checkbox"></div>');
         });
     });
 });
