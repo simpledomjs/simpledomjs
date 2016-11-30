@@ -44,7 +44,7 @@ export function renderTo(node, ...elements) {
         .forEach(node => realNode.appendChild(node));
 }
 
-function convertToNode(element) {
+export function convertToNode(element) {
     if (!element.isElem) {
         return element.__asHtml ? element : document.createTextNode('' + element);
     }
