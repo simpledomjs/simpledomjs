@@ -44,13 +44,7 @@ export function renderTo(node, ...elements) {
         .forEach(node => realNode.appendChild(node));
 }
 
-export function convertToNode(element) {
-    if (!element.isElem) {
-        return element.__asHtml ? element : document.createTextNode('' + element);
-    }
-
-    const node = document.createElement(element.name);
-
+export function updateAttrs(node, element) {
     Object.keys(element.attrs)
         .filter(key => element.attrs[key] !== undefined)
         .forEach(key => {
@@ -77,6 +71,16 @@ export function convertToNode(element) {
                 }
             }
         });
+}
+
+export function convertToNode(element) {
+    if (!element.isElem) {
+        return element.__asHtml ? element : document.createTextNode('' + element);
+    }
+
+    const node = document.createElement(element.name);
+
+    updateAttrs(node, element);
 
     element.children
         .filter(element => element !== undefined && element !== null)
